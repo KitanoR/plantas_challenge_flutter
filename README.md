@@ -1,16 +1,15 @@
 # app_plant_shop
 
-A new Flutter project.
+Plantas flutter.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Es un reto de diseño de flutter
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- [Inspiración](https://dribbble.com/shots/10534486-Plant-shop-Mobile-App)
 
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+![alt text](https://raw.githubusercontent.com/KitanoR/plantas_challenge_flutter/master/assets/demo.png)

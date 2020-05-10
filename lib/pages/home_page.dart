@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import '../core/consts.dart';
 import '../core/consts.dart';
 import '../core/consts.dart';
+import '../core/consts.dart';
 import '../models/plant_model.dart';
 import '../models/plant_model.dart';
+import '../models/plant_model.dart';
+import '../models/plant_type_model.dart';
 import '../models/plant_type_model.dart';
 import '../models/plant_type_model.dart';
 
@@ -15,11 +18,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<PlantModel> _plants;
+  ScrollController _scrollController;
+  double _offset;
+  bool _isStrink;
+
 
   @override
   void initState() {
+    _offset = 0.0;
+    _scrollController = new ScrollController();
+    _scrollController.addListener(_scrollListener);
     _plants = PlantModel.plants;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController?.dispose();
+    super.dispose();
+  }
+
+  _scrollListener() {
+    setState(() {
+      if(_scrollController.offset < 75) {
+        _offset = _scrollController.offset;
+      }
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -28,6 +52,7 @@ class _HomePageState extends State<HomePage> {
       body: DefaultTabController(
         length: PlantTypeModel.values.length,
         child: NestedScrollView(
+          controller: _scrollController,
           headerSliverBuilder: (context, index) {
             return <Widget> [
               SliverAppBar(
@@ -54,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 flexibleSpace: FlexibleSpaceBar(
                   titlePadding: EdgeInsetsDirectional.only(
-                    start: 12,
+                    start: 12 + ((_offset / 100) * 60),
                     bottom: 16
                   ),
                   centerTitle: false,
@@ -66,6 +91,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               )
+            
             ];
           },
           body: Column(
@@ -73,35 +99,53 @@ class _HomePageState extends State<HomePage> {
               _searchBar(),
               _tabBar(),
               Expanded(
-                child: ListView(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 300,
-                          child: ListView.builder(
-                            itemCount: _plants.length,
-                            scrollDirection: Axis.horizontal, 
-                            itemBuilder: (BuildContext context, int index) { 
-                              return _buildItemSlider(index);
-                             },
+                child: TabBarView(
+                   children: <Widget>[
+                     ...PlantTypeModel.values.map((data){
+                       return ListView(
+                        padding: EdgeInsets.all(0),
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: SizedBox(
+                              height: 300,
+                              child: ListView.builder(
+                                itemCount: _plants.length,
+                                scrollDirection: Axis.horizontal, 
+                                itemBuilder: (BuildContext context, int index) { 
+                                  return _buildItemSlider(index);
+                                 },
+                              ),
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Lastest favorites',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(
+                              'Lastest favorites',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20
+                              ),
+                            ),
                           ),
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _plants.length,
-                          physics: BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return _buildItemLast(index);
-                          },
-                        )
-                      ],
-                    ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: ListView.builder(
+                              padding: EdgeInsets.all(0),
+                              shrinkWrap: true,
+                              itemCount: _plants.length,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return _buildItemLast(index);
+                              },
+                            ),
+                          )
+                        ],
+                      );
+                
+                     })
+                   ],
+                ),
               )
             
             ],
@@ -227,48 +271,99 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildItemLast(int index) {
-    return Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12))
-        ),
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 70,
-              child: Row(
-                children: <Widget>[
-                   Image.asset(
-                     'assets/${_plants[index].id}.png',
-                     height: 60,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          _plants[index].type.toString().replaceFirst('PlantTypeModel.', ''),
-                          style: TextStyle(
-                            color: Colors.black38
-                          ),
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16))
+          ),
+          child: Stack(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                  width: 100,
+                  height: 70,
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: AppColors.mainColor,
+                    borderRadius: BorderRadius.all(Radius.circular(16))
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _buildFavoriteButton(Icons.add, (){}),
+                      Spacer(),
+                      Container(height: .5, width: 40, color: Colors.black38,),
+                      Spacer(),
+                      _buildFavoriteButton(Icons.remove, (){}),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(16))
+                ),
+                height: 70,
+                margin: EdgeInsets.only(right: 50,),
+                padding: EdgeInsets.all(4),
+                child: Row(
+                  children: <Widget>[
+                     Padding(
+                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                       child: Image.asset(
+                         'assets/${_plants[index].id}.png',
+                         height: 60,
                         ),
-                        Text(
-                          '${_plants[index].price.toString()} \$',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold
+                     ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            _plants[index].type.toString().replaceFirst('PlantTypeModel.', ''),
+                            style: TextStyle(
+                              color: Colors.black38
+                            ),
                           ),
-                        ),
-                        Text(
+                          Text(
+                            '${_plants[index].price.toString()} \$',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
                           '2',
                           style: TextStyle(
                             fontWeight: FontWeight.bold
                           ),
-                        )
-                      ],
-                    )
-                ],
-              ),
-            )
-          ],
-        ),
+                        ),
+                      )
+                  ],
+                ),
+              )
+            ],
+          ),
+      ),
+    );
+  }
+
+  Widget _buildFavoriteButton(IconData add, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 40,
+        child: Icon(add, color: Colors.white,),
+      ),
     );
   }
 }
