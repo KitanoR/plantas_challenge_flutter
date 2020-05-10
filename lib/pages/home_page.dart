@@ -10,6 +10,8 @@ import '../models/plant_model.dart';
 import '../models/plant_type_model.dart';
 import '../models/plant_type_model.dart';
 import '../models/plant_type_model.dart';
+import 'plant_add_page.dart';
+import 'plant_add_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -208,62 +210,68 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildItemSlider(int index) {
-    return Container(
-      width: 200,
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12))
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                _plants[index].type.toString().replaceFirst('PlantTypeModel.', ''),
-                style: TextStyle(
-                  color: Colors.black38
-                ),
-              ),
-              Text(
-                _plants[index].name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-              Spacer(),
-              Image.asset('assets/${_plants[index].id}.png'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'From',
-                        style: TextStyle(
-                          color: Colors.black38
-                        ),
-                      ),
-                      Text(
-                        '${_plants[index].price.toString()} \$',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ],
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) 
+         => PlantAddPage(plantModel: _plants[index],)));
+      },
+      child: Container(
+        width: 200,
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  _plants[index].type.toString().replaceFirst('PlantTypeModel.', ''),
+                  style: TextStyle(
+                    color: Colors.black38
                   ),
-                  Container(
-                    child: Icon(Icons.add, color: Colors.white,),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      color: AppColors.mainColor
+                ),
+                Text(
+                  _plants[index].name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+                Spacer(),
+                Image.asset('assets/${_plants[index].id}.png'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'From',
+                          style: TextStyle(
+                            color: Colors.black38
+                          ),
+                        ),
+                        Text(
+                          '${_plants[index].price.toString()} \$',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ],
                     ),
-                  )
-                ],
-              )
-            ],
+                    Container(
+                      child: Icon(Icons.add, color: Colors.white,),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: AppColors.mainColor
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -271,88 +279,94 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildItemLast(int index) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16))
-          ),
-          child: Stack(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  width: 100,
-                  height: 70,
-                  padding: EdgeInsets.all(4),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)
+        => PlantAddPage(plantModel: _plants[index])));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16))
+            ),
+            child: Stack(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    width: 100,
+                    height: 70,
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.mainColor,
+                      borderRadius: BorderRadius.all(Radius.circular(16))
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        _buildFavoriteButton(Icons.add, (){}),
+                        Spacer(),
+                        Container(height: .5, width: 40, color: Colors.black38,),
+                        Spacer(),
+                        _buildFavoriteButton(Icons.remove, (){}),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
                   decoration: BoxDecoration(
-                    color: AppColors.mainColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(16))
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  height: 70,
+                  margin: EdgeInsets.only(right: 50,),
+                  padding: EdgeInsets.all(4),
+                  child: Row(
                     children: <Widget>[
-                      _buildFavoriteButton(Icons.add, (){}),
-                      Spacer(),
-                      Container(height: .5, width: 40, color: Colors.black38,),
-                      Spacer(),
-                      _buildFavoriteButton(Icons.remove, (){}),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(16))
-                ),
-                height: 70,
-                margin: EdgeInsets.only(right: 50,),
-                padding: EdgeInsets.all(4),
-                child: Row(
-                  children: <Widget>[
-                     Padding(
-                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                       child: Image.asset(
-                         'assets/${_plants[index].id}.png',
-                         height: 60,
-                        ),
-                     ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            _plants[index].type.toString().replaceFirst('PlantTypeModel.', ''),
-                            style: TextStyle(
-                              color: Colors.black38
-                            ),
+                       Padding(
+                         padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                         child: Image.asset(
+                           'assets/${_plants[index].id}.png',
+                           height: 60,
                           ),
-                          Text(
-                            '${_plants[index].price.toString()} \$',
+                       ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              _plants[index].type.toString().replaceFirst('PlantTypeModel.', ''),
+                              style: TextStyle(
+                                color: Colors.black38
+                              ),
+                            ),
+                            Text(
+                              '${_plants[index].price.toString()} \$',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            '2',
                             style: TextStyle(
                               fontWeight: FontWeight.bold
                             ),
                           ),
-                        ],
-                      ),
-                      Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                          '2',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      )
-                  ],
-                ),
-              )
-            ],
-          ),
+                        )
+                    ],
+                  ),
+                )
+              ],
+            ),
+        ),
       ),
     );
   }

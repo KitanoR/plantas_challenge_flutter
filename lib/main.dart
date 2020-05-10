@@ -1,6 +1,9 @@
 import 'package:app_plant_shop/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
+import 'pages/home_page.dart';
+import 'pages/plant_add_page.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
