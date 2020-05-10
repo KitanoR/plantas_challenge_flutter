@@ -1,3 +1,4 @@
+import 'package:app_plant_shop/widgets/Animated_scan.dart';
 import 'package:app_plant_shop/widgets/clipper_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -46,8 +47,21 @@ class _PlantAddPageState extends State<PlantAddPage> {
               color: AppColors.mainColor,
               width: size.width,
               height: size.height / 2,
-            
             ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              width: 300,
+              child: Image.asset(
+                'assets/${widget.plantModel.id}.png',
+                fit:  BoxFit.fitWidth,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: AnimatedScan(),
           ),
           buildBottomDetail(),
           

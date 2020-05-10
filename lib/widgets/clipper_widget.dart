@@ -7,7 +7,8 @@ class ClipperWidget extends CustomClipper<Path> {
     Path path = new Path();
     path.moveTo(0, 0);
     path.lineTo(0, 100);
-    path.moveTo(size.width, size.height);
+    path.quadraticBezierTo(size.width / 2, size.height, size.width, size.height);
+    path.lineTo(size.width, size.height);
     path.lineTo(size.width, 0);
     path.close();
     return path;
